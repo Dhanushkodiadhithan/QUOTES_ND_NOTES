@@ -1,13 +1,16 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { FaSearch } from "react-icons/fa";
 
 export default function SearchBar() {
   return (
     <>
-    <span className="w-[700px] relative">
-          <input type="text" placeholder="Search quotes" className=" font-normal shadow-md text-lg text-gray-600 w-full ps-10 py-1 placeholder:text-md border-2 focus:border-primary rounded-md placeholder:text-gray-400 outline-none"/>
-           <FontAwesomeIcon icon={faMagnifyingGlass} className="absolute top-3 left-2 text-gray-400 text-lg"/>  
-          </span> 
+      <span className="relative w-[500px]">
+        <input
+          type="text"
+          placeholder="Search quotes"
+          className="placeholder:text-md focus:border-primary w-full rounded-md border-2 py-1 ps-10 text-lg font-normal text-gray-600 shadow-md outline-none placeholder:text-gray-400"
+        />
+        <FaSearch className="absolute top-3 left-2 text-lg text-gray-400" />
+      </span>
     </>
-  )
+  );
 }
