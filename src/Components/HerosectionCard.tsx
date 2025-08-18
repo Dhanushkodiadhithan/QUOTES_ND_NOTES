@@ -1,25 +1,28 @@
 import { FaRegHeart } from "react-icons/fa";
 import { FaShareAlt } from "react-icons/fa";
-
+import { LuQuote } from "react-icons/lu";
 export default function HerosectionCard() {
   return (
     <>
-      <div className="flex h-full w-full items-center justify-center">
-        <div className="w-3/4 rounded-lg bg-white p-8 text-white border-2 border-gray-200 shadow-lg">
+      <div className="relative flex h-full w-full items-center justify-center">
+        <div className="w-3/4 rounded-lg border-2 border-gray-200 bg-white p-8 text-white shadow-lg">
           <div className="mb-4 flex h-50 w-full items-center justify-center">
             <img src="./src/Asserts/Spiderman.webp" alt="Spiderman" />
           </div>
-          <div className="mb-6 text-xl text-black font-bold">
+          <div className="mb-6 text-xl font-bold text-black">
             "When i was born, The devil said Ohh shit ! Competition !!."
           </div>
           <div className="flex justify-between text-gray-600">
-        <div className="font-bold cursor-pointer">-- Steve Jobs</div>
+            <div className="cursor-pointer font-bold">-- Steve Jobs</div>
             <div className="flex">
-              <FaRegHeart className="text-lg cursor-pointer" />
-              <FaShareAlt className="ml-4 text-lg cursor-pointer" />
+              <FaRegHeart className="cursor-pointer text-lg" />
+              <FaShareAlt className="ml-4 cursor-pointer text-lg" />
             </div>
           </div>
-            <div className="text-sm text-gray-400">Attitude</div>
+          <div className="text-sm text-gray-400">Attitude</div>
+          <span className="bg-primary absolute top-0 left-0 rounded-full p-3 text-xl text-white">
+            <LuQuote />
+          </span>
         </div>
       </div>
     </>
