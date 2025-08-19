@@ -4,9 +4,10 @@ import { LuQuote } from "react-icons/lu";
 export default function HerosectionCard() {
   return (
     <>
-      <div className="relative flex h-full w-full items-center justify-center">
-        <div className="w-3/4 rounded-lg border-2 border-gray-200 bg-white p-8 text-white shadow-lg">
-          <div className="mb-4 flex h-50 w-full items-center justify-center">
+      {/* Hero Section Card */}
+      <div className="flex h-full w-full items-center justify-center">
+        <div className=" relative w-3/4 rounded-lg border-2 border-gray-200 bg-white p-8 text-white shadow-lg transition-all duration-500 hover:scale-105">
+          <div className=" mb-4 flex h-50 w-full items-center justify-center">
             <img src="./src/Asserts/Spiderman.webp" alt="Spiderman" />
           </div>
           <div className="mb-6 text-xl font-bold text-black">
@@ -20,7 +21,7 @@ export default function HerosectionCard() {
             </div>
           </div>
           <div className="text-sm text-gray-400">Attitude</div>
-          <span className="bg-primary absolute top-0 left-0 rounded-full p-3 text-xl text-white">
+          <span className="bg-primary absolute top-[-20px] left-[-20px] rounded-full p-3 text-xl text-white">
             <LuQuote />
           </span>
         </div>

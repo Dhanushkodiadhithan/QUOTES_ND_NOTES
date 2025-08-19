@@ -6,6 +6,7 @@ function App() {
   return (
     <>
       <Router>
+        {/* This Navbar is used in all pages */}
         <Navbar />
         <Routes>
           <Route path="/" element={<Homepage />} />

@@ -4,6 +4,7 @@ import SearchBar from "./SearchBar";
 export default function Navbar() {
   return (
     <>
+      {/* Navbar */}
       <nav className="fixed top-0 left-0 w-full border-b-2 border-gray-200 py-2 text-3xl font-bold backdrop-blur-sm md:px-5 z-50">
         <div className="container mx-auto flex items-center justify-between px-4">
           <div className="flex items-center gap-2">

@@ -3,6 +3,7 @@ import { FaSearch } from "react-icons/fa";
 export default function SearchBar() {
   return (
     <>
+      {/* Search Bar */}
       <span className="relative w-[500px]">
         <input
           type="text"
