@@ -17,7 +17,10 @@ export default function Navbar() {
         <div className="container mx-auto flex items-center justify-between px-4">
           <div className="flex items-center gap-2">
             <FaQuoteRight className="text-primary text-2xl" />
-            <span className="font-serif text-2xl font-bold cursor-pointer" onClick={() => navigate("/")}>
+            <span
+              className="cursor-pointer font-serif text-2xl font-bold"
+              onClick={() => navigate("/")}
+            >
               QUOTES_ND_NOTES
             </span>
           </div>
@@ -30,8 +33,11 @@ export default function Navbar() {
           >
             <GoPerson />
             {showDropdown && (
-              <div className="absolute top-[50px] right-[10px] w-[150px] rounded-lg border-2 border-gray-200 bg-white p-2 text-sm text-gray-600 shadow-2xl">
-                <span className="flex items-center gap-2 p-2 hover:bg-gray-100" onClick={() => navigate("/user-profile")}>
+              <div className="absolute top-[50px] right-[10px] z-[100] w-[150px] rounded-lg border-2 border-gray-200 bg-white p-2 text-sm text-gray-600 shadow-2xl">
+                <span
+                  className="flex items-center gap-2 p-2 hover:bg-gray-100"
+                  onClick={() => navigate("/user-profile")}
+                >
                   <IoDocumentTextOutline className="text-md" /> My Content
                 </span>
                 <span className="flex items-center gap-2 p-2 hover:bg-gray-100">

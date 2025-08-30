@@ -9,6 +9,7 @@ import { FaRegHeart } from "react-icons/fa6";
 import { GoPerson } from "react-icons/go";
 import { CiSettings } from "react-icons/ci";
 import Accountsetting from "../Components/Accountsetting";
+import Mycontent from "../Components/Mycontent";
 export default function UserProfile() {
   const [profileImg, setProfileImg] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<string>("Account Settings");
@@ -139,6 +140,7 @@ export default function UserProfile() {
       </div>
       {/* Content Based on Active Tab */}
       {activeTab === "Account Settings" && <Accountsetting />}
+      {activeTab === "My Content" && <Mycontent />}
     </>
   );
 }

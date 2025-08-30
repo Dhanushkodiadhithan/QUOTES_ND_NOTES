@@ -11,7 +11,7 @@ export default function CategoryBar() {
     <>
       {/* Category Bar */}
       {/* This bar is sticky and will always be visible at the top of the page */}
-      <div className=" sticky top-16 z-50 h-[70px] w-full bg-white shadow-md">
+      <div className=" sticky top-16 z-30 h-[70px] w-full bg-white shadow-md">
         <div className="container mx-auto flex h-full items-center justify-between px-10">
           <span className="text-2xl font-bold text-white transition-transform hover:scale-105 hover:text-black">
             <span className="bg-primary flex cursor-pointer items-center gap-2 rounded-2xl px-4 py-2">
