@@ -2,6 +2,7 @@ import { IoSearch } from "react-icons/io5";
 import { FaRegHeart } from "react-icons/fa";
 import { GoPerson } from "react-icons/go";
 import { FiUpload } from "react-icons/fi";
+
 export default function Footer() {
   return (
     <>
@@ -43,7 +44,7 @@ export default function Footer() {
         </span>
       </div>
       <div className="mt-10 border-t border-gray-200 py-10">
-        <p className="text-center text-gray-400 ">
+        <p className="text-center text-gray-400 " >
           © 2025 QUOTES_ND_NOTES. All rights reserved.
           <br />
           Discover inspiration and wisdom through carefully curated quotes every day.
