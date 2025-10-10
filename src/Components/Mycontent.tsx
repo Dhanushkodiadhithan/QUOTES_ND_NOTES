@@ -4,13 +4,17 @@ import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { LuQuote } from "react-icons/lu";
 import Card from "./Card";
 import { MdDeleteOutline } from "react-icons/md";
+import UploadQuote from "./UploadQuotes";
+import { useSelector, useDispatch } from "react-redux";
+import { ToggleShow } from "../Redux/Slices/Justslice";
 const tabs = [
   { label: "All Content", count: 6 },
   { label: "Shared Quotes", count: 3 },
-  { label: "Drafts", count: 1 },
+  { label: "Favorites", count: 2 },
 ];
-
 export default function Mycontent() {
+  const showUploadQuote = useSelector((state:any)=>state.just.showUploadQuote);
+  const dispatch = useDispatch();
   const [activeTab, setActiveTab] = useState<String>("All Content");
   const [quotedelete, setQuoteDelete] = useState<boolean>(false);
   return (
@@ -44,38 +48,45 @@ export default function Mycontent() {
               <p className="text-sm text-[#27bb81]">+127 this month</p>
             </div>
           </div>
-      <div className="w-full">
-        <h2 className="mb-6 text-2xl font-bold">My Content</h2>
-        {/* Tabs */}
-        <div className="mb-8 flex gap-4">
-          {tabs.map((tab) => (
-            <button
-              key={tab.label}
-              className={`rounded-full px-4 py-2 font-medium transition-all duration-300 ${
-                activeTab === tab.label
-                  ? "bg-primary text-white"
-                  : "hover:bg-primary bg-gray-100 text-gray-600 hover:text-white"
-              }`}
-              onClick={() => setActiveTab(tab.label)}
-            >
-              {tab.label} <span className="ml-2">{tab.count}</span>
-            </button>
-          ))}
-          <button className="bg-red-500 ml-auto flex items-center gap-1 rounded-md px-4 py-2 text-white" onClick={() => setQuoteDelete(!quotedelete)}>
-          <MdDeleteOutline className="text-lg"/>  Delete
-          </button>
-          <button className="bg-primary  flex items-center gap-2 rounded-md px-4 py-2 text-white">
-            + Create New
-          </button>
-        </div>
-        {/* Cards Grid */}
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
-          {/* Render your Card component for each content item */}
-          {Array.from({ length: 6 }).map((_, idx) => (
-            <Card key={idx}/>
-          ))}
-        </div>
-      </div>
+          <div className="w-full">
+            <h2 className="mb-6 text-2xl font-bold">My Content</h2>
+            {/* Tabs */}
+            <div className="mb-8 flex gap-4">
+              {tabs.map((tab) => (
+                <button
+                  key={tab.label}
+                  className={`rounded-full px-4 py-2 font-medium transition-all duration-300 ${
+                    activeTab === tab.label
+                      ? "bg-primary text-white"
+                      : "hover:bg-primary bg-gray-100 text-gray-600 hover:text-white"
+                  }`}
+                  onClick={() => setActiveTab(tab.label)}
+                >
+                  {tab.label} <span className="ml-2">{tab.count}</span>
+                </button>
+              ))}
+              <button
+                className="ml-auto flex items-center gap-1 rounded-md bg-red-500 px-4 py-2 text-white"
+                onClick={() => setQuoteDelete(!quotedelete)}
+              >
+                <MdDeleteOutline className="text-lg" /> Delete
+              </button>
+              <button
+                className="bg-primary flex items-center gap-2 rounded-md px-4 py-2 text-white"
+                onClick={() => dispatch(ToggleShow())}
+              >
+                + Create New
+              </button>
+            </div>
+            {/* Cards Grid */}
+           <div className={`grid grid-cols-3 gap-6 ${showUploadQuote?"grid-cols-1":""}`}>
+              {showUploadQuote ? (
+                <UploadQuote />
+              ) : (
+                Array.from({ length: 6 }).map((_, idx) => <Card key={idx} />)
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </>

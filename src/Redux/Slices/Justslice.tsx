@@ -1,24 +1,21 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 interface JustState {
-  count: number;
+  showUploadQuote: boolean;
 }
 
 const initialState: JustState = {
-  count: 0,
+  showUploadQuote: false,
 };
 
 const justSlice = createSlice({
   name: "just",
   initialState,
   reducers: {
-    increment: (state) => {
-      state.count += 1;
-    },
-    decrement: (state) => {
-      state.count -= 1;
+    ToggleShow: (state) => {
+      state.showUploadQuote = !state.showUploadQuote;
     },
   },
 });
-export const { increment, decrement } = justSlice.actions;
+export const { ToggleShow } = justSlice.actions;
 export default justSlice.reducer;

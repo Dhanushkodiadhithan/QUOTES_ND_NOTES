@@ -7,11 +7,12 @@ export default function Accountsetting() {
   return (
     <>
     {/* Account Settings Section */}
-      <div className="w-100% mb-20 flex items-center justify-center py-5">
+      <div className="w-100% my-10 flex items-center justify-center py-5">
         <div className="flex w-[1000px] gap-10">
           <div className="w-[50%]">
             <p className="mb-3 text-xl font-bold">Personal Information</p>
             <div className="flex flex-col gap-5 border border-gray-200 p-5">
+              <form action="#">
               <div>
                 <label className="cursor-pointer" htmlFor="name">
                   Full Name <span className="text-md text-red-600">*</span>
@@ -23,6 +24,7 @@ export default function Accountsetting() {
                   id="name"
                   required
                   className="focus:outline-primary w-full p-2"
+                  readOnly
                 />
               </div>
               <div>
@@ -36,6 +38,7 @@ export default function Accountsetting() {
                   id="email"
                   required
                   className="focus:outline-primary w-full p-2"
+                  readOnly
                 />
               </div>
               <div>
@@ -48,6 +51,7 @@ export default function Accountsetting() {
                   value="+91 9876543210"
                   id="phno"
                   className="focus:outline-primary w-full p-2"
+                  readOnly
                 />
               </div>
               <div>
@@ -60,6 +64,7 @@ export default function Accountsetting() {
                   value="Chennai, India"
                   id="location"
                   className="focus:outline-primary w-full p-2"
+                  readOnly
                 />
               </div>
               <div>
@@ -72,6 +77,7 @@ export default function Accountsetting() {
                   value="https://example.com"
                   id="Website"
                   className="focus:outline-primary w-full p-2"
+                  readOnly
                 />
               </div>
               <div>
@@ -87,6 +93,7 @@ export default function Accountsetting() {
                   onChange={(e) => setBio(e.target.value)}
                   maxLength={500}
                   placeholder="Tell us about yourself..."
+                  readOnly
                 ></textarea>
                 <p className="text-sm text-gray-400">
                   {bio.length}/500 characters
@@ -95,6 +102,7 @@ export default function Accountsetting() {
               <button className="bg-primary mt-4 w-full rounded-md py-2 text-white">
                 Save Changes
               </button>
+              </form>
             </div>
           </div>
           <div className="flex w-[50%] flex-col gap-10">

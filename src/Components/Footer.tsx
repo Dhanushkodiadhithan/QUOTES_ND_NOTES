@@ -2,7 +2,6 @@ import { IoSearch } from "react-icons/io5";
 import { FaRegHeart } from "react-icons/fa";
 import { GoPerson } from "react-icons/go";
 import { FiUpload } from "react-icons/fi";
-
 export default function Footer() {
   return (
     <>

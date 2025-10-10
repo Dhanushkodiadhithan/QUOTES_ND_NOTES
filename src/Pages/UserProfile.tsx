@@ -5,7 +5,6 @@ import {
   IoCameraOutline,
   IoDocumentTextOutline,
 } from "react-icons/io5";
-import { FaRegHeart } from "react-icons/fa6";
 import { GoPerson } from "react-icons/go";
 import { CiSettings } from "react-icons/ci";
 import Accountsetting from "../Components/Accountsetting";
@@ -112,17 +111,6 @@ export default function UserProfile() {
               >
                 <IoDocumentTextOutline className="text-md" />
                 <span>My Content</span>
-              </li>
-              <li
-                className={`flex cursor-pointer items-center gap-2 border-b-2 py-2 transition-all duration-300 ease-in-out ${
-                  activeTab === "Favorites"
-                    ? "border-primary text-primary"
-                    : "border-transparent hover:text-black"
-                }`}
-                onClick={() => setActiveTab("Favorites")}
-              >
-                <FaRegHeart className="text-md" />
-                Favorites
               </li>
               <li
                 className={`flex cursor-pointer items-center gap-2 border-b-2 py-2 transition-all duration-300 ease-in-out ${
