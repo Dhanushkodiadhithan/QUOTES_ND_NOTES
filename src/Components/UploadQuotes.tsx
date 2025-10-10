@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import { IoCameraOutline } from "react-icons/io5";
 import { useDispatch } from "react-redux";
 import { ToggleShow } from "../Redux/Slices/Justslice";
-const DEFAULT_IMAGE = "./src/Asserts/Spiderman.webp";
+const DEFAULT_IMAGE = "src/backend/uploads/Spiderman.webp";
 
 const categories = ["Motivation", "Life", "Wisdom", "Success", "Happiness"];
 
@@ -46,6 +46,7 @@ export default function UploadQuotes() {
       accept="image/*"
       className="hidden"
       onChange={handleImageChange}
+      required
     />
   </label>
 </div>

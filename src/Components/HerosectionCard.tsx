@@ -8,7 +8,7 @@ export default function HerosectionCard() {
       <div className="flex h-full w-full items-center justify-center">
         <div className=" relative w-3/4 rounded-lg border-2 border-gray-200 bg-white p-8 text-white shadow-lg transition-all duration-500 hover:scale-105">
           <div className=" mb-4 flex h-50 w-full items-center justify-center">
-            <img src="./src/Asserts/Spiderman.webp" alt="Spiderman" />
+            <img src="src\backend\uploads\Spiderman.webp" alt="Spiderman" />
           </div>
           <div className="mb-6 text-xl font-bold text-black">
             "When i was born, The devil said Ohh shit ! Competition !!."

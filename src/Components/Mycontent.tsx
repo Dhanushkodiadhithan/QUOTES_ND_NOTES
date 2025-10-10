@@ -83,7 +83,7 @@ export default function Mycontent() {
               {showUploadQuote ? (
                 <UploadQuote />
               ) : (
-                Array.from({ length: 6 }).map((_, idx) => <Card key={idx} />)
+                <div>ldskfjsd</div>
               )}
             </div>
           </div>

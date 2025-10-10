@@ -1,16 +1,35 @@
-import { LuSparkles } from "react-icons/lu";
-import { LuQuote } from "react-icons/lu";
+import { LuSparkles, LuQuote, LuTag } from "react-icons/lu";
 import { FaRegHeart } from "react-icons/fa";
-import { LuTag } from "react-icons/lu";
 import { FiCheckCircle } from "react-icons/fi";
+
 import Card from "../Components/Card";
 import HerosectionCard from "../Components/HerosectionCard";
 import CategoryBar from "../Components/CategoryBar";
 import Footer from "../Components/Footer";
+
+import { useLoaderData } from "react-router-dom";
+
 export default function Homepage() {
+  const quotes = useLoaderData() as Array<{
+    _id: string;
+  text: string;
+  author: string;
+  category: string;
+  tags: string[];
+  image?: string;
+  likes: number;
+  likedBy?: string[];
+  shares?: number;
+  sharedBy?: string[];
+  savedBy?: string[];
+  isPublic?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+  }>;
+
   return (
     <>
-    {/* Hero Section Content*/}
+      {/* Hero Section Content*/}
       <div className="container mx-auto mt-16 flex h-[600px] items-center justify-between">
         <div className="left flex h-full w-1/2 flex-col justify-around gap-4 py-20 md:px-10">
           <div className="text-primary flex items-center gap-2 text-sm font-bold">
@@ -56,14 +75,14 @@ export default function Homepage() {
         <div className="flex flex-col">
           <span className="text-3xl font-bold">Inspirational Quotes</span>{" "}
           <span className="text-lg text-gray-400">
-            {10} quotes in all categories
+            {quotes.length} quotes in all categories
           </span>
         </div>
         {/* FeedCards Section */}
         <div>
           <div className="grid grid-cols-1 place-items-center gap-4 py-10 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3">
-            {Array.from({ length: 10 }).map((_, idx) => (
-              <Card key={idx} />
+            {quotes.map((quote) => (
+              <Card key={quote._id} quote={quote} />
             ))}
           </div>
           <div className="container mx-auto flex justify-center gap-3 text-center text-gray-400">
