@@ -2,7 +2,18 @@ import { IoSearch } from "react-icons/io5";
 import { FaRegHeart } from "react-icons/fa";
 import { GoPerson } from "react-icons/go";
 import { FiUpload } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
+
 export default function Footer() {
+  const navigate = useNavigate();
+  const Uploadfunction = () => {
+    navigate("/user-profile", {
+      state: {
+        activeTab: 'My Content',
+        ToggleShow: true
+      }
+    });
+  }
   return (
     <>
       {/* Footer Component */}
@@ -20,7 +31,7 @@ export default function Footer() {
           <p className="text-lg font-bold text-black">Search Content</p>
           <p className="text-gray-400">Find quotes favorite quickly</p>
         </span>
-        <span className="flex flex-col items-center gap-2 rounded-lg border border-gray-200 bg-white px-10 py-4 shadow-md hover:shadow-lg transition-shadow duration-300 transform hover:translate-y-[-5px] ease-out cursor-pointer">
+        <span className="flex flex-col items-center gap-2 rounded-lg border border-gray-200 bg-white px-10 py-4 shadow-md hover:shadow-lg transition-shadow duration-300 transform hover:translate-y-[-5px] ease-out cursor-pointer" onClick={Uploadfunction}>
           <span className="flex h-16 w-16 items-center justify-center text-[25px] rounded-full bg-[#10b981] text-white">
            <FiUpload />
           </span>

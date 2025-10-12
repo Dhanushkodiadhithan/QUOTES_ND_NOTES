@@ -5,7 +5,7 @@ import UploadQuotes from "./Components/UploadQuotes";
 import Homepage from "./Pages/Homepage";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { getQuotesLoader } from "./loaders/getQuotesLoader"; // adjust import path
-
+import { getUserQuotesLoader } from "./loaders/getUserQuotesLoader"; // adjust import path
 // Define router with loader for homepage
 const router = createBrowserRouter([
   {
@@ -26,6 +26,7 @@ const router = createBrowserRouter([
         <UserProfile />
       </>
     ),
+    loader: getUserQuotesLoader,
   },
   {
     path: "/upload-quotes",

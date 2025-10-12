@@ -7,16 +7,44 @@ import { MdDeleteOutline } from "react-icons/md";
 import UploadQuote from "./UploadQuotes";
 import { useSelector, useDispatch } from "react-redux";
 import { ToggleShow } from "../Redux/Slices/Justslice";
+import { useLoaderData } from "react-router-dom";
+
 const tabs = [
   { label: "All Content", count: 6 },
   { label: "Shared Quotes", count: 3 },
   { label: "Favorites", count: 2 },
 ];
+
+// Define quote type for strong typing
+interface Quote {
+  _id: string;
+  text: string;
+  author: string;
+  category: string;
+  tags: string[];
+  image?: string;
+  likes: number;
+  likedBy?: string[];
+  shares?: number;
+  sharedBy?: string[];
+  savedBy?: string[];
+  isPublic?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+  postedBy?: string;
+}
+
 export default function Mycontent() {
-  const showUploadQuote = useSelector((state:any)=>state.just.showUploadQuote);
+  const showUploadQuote = useSelector((state: any) => state.just.showUploadQuote);
   const dispatch = useDispatch();
-  const [activeTab, setActiveTab] = useState<String>("All Content");
+  const [activeTab, setActiveTab] = useState<string>("All Content");
   const [quotedelete, setQuoteDelete] = useState<boolean>(false);
+
+  const quotes = useLoaderData() as Quote[];
+
+  // Filter quotes posted by 'user1'
+  const user1Quotes = quotes.filter((quote) => quote.postedBy === "admin");
+
   return (
     <>
       <div className="flex justify-center p-10">
@@ -79,11 +107,19 @@ export default function Mycontent() {
               </button>
             </div>
             {/* Cards Grid */}
-           <div className={`grid grid-cols-3 gap-6 ${showUploadQuote?"grid-cols-1":""}`}>
+            <div
+              className={`grid grid-cols-3 gap-6 ${
+                showUploadQuote ? "grid-cols-1" : ""
+              }`}
+            >
               {showUploadQuote ? (
                 <UploadQuote />
               ) : (
-                <div>ldskfjsd</div>
+                <>
+                  {user1Quotes.map((quote) => (
+                    <Card key={quote._id} quote={quote} />
+                  ))}
+                </>
               )}
             </div>
           </div>
