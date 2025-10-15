@@ -1,24 +1,27 @@
 import { useState } from "react";
 import { MdOutlineFileUpload } from "react-icons/md";
+import { changeProfileTab } from "../Redux/Slices/Justslice";
+import { useDispatch, useSelector } from "react-redux";
 import {
   IoSettingsOutline,
   IoCameraOutline,
   IoDocumentTextOutline,
 } from "react-icons/io5";
 import { GoPerson } from "react-icons/go";
-import { CiSettings } from "react-icons/ci";
 import Accountsetting from "../Components/Accountsetting";
 import Mycontent from "../Components/Mycontent";
 export default function UserProfile() {
   const [profileImg, setProfileImg] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<string>("Account Settings");
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const url = URL.createObjectURL(e.target.files[0]);
       setProfileImg(url);
     }
   };
-
+  const dispatch = useDispatch();
+  const activeProfileTab = useSelector(
+    (state: any) => state.just.activeProfileTab,
+  );
   return (
     <>
       <div className="bg-[#fafaf9] pt-16">
@@ -93,42 +96,32 @@ export default function UserProfile() {
             <ul className="flex gap-10 text-gray-400">
               <li
                 className={`flex cursor-pointer items-center gap-2 border-b-2 py-2 transition-all duration-300 ease-in-out ${
-                  activeTab === "Account Settings"
+                  activeProfileTab === "Account Settings"
                     ? "border-primary text-primary"
                     : "border-transparent hover:text-black"
                 }`}
-                onClick={() => setActiveTab("Account Settings")}
+                onClick={() => dispatch(changeProfileTab("Account Settings"))}
               >
                 <GoPerson className="text-md" /> Account Settings
               </li>
               <li
                 className={`flex cursor-pointer items-center gap-2 border-b-2 py-2 transition-all duration-300 ease-in-out ${
-                  activeTab === "My Content"
+                  activeProfileTab === "My Content"
                     ? "border-primary text-primary"
                     : "border-transparent hover:text-black"
                 }`}
-                onClick={() => setActiveTab("My Content")}
+                onClick={() => dispatch(changeProfileTab("My Content"))}
               >
                 <IoDocumentTextOutline className="text-md" />
                 <span>My Content</span>
-              </li>
-              <li
-                className={`flex cursor-pointer items-center gap-2 border-b-2 py-2 transition-all duration-300 ease-in-out ${
-                  activeTab === "Preferences"
-                    ? "border-primary text-primary"
-                    : "border-transparent hover:text-black"
-                }`}
-                onClick={() => setActiveTab("Preferences")}
-              >
-                <CiSettings className="text-xl" /> Preferences
               </li>
             </ul>
           </div>
         </div>
       </div>
       {/* Content Based on Active Tab */}
-      {activeTab === "Account Settings" && <Accountsetting />}
-      {activeTab === "My Content" && <Mycontent />}
+      {activeProfileTab === "Account Settings" && <Accountsetting />}
+      {activeProfileTab === "My Content" && <Mycontent />}
     </>
   );
 }

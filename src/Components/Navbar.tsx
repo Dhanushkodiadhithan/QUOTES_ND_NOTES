@@ -7,9 +7,18 @@ import { IoDocumentTextOutline } from "react-icons/io5";
 import { IoIosHelpCircleOutline } from "react-icons/io";
 import { PiSignOutFill } from "react-icons/pi";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { changeProfileTab, KeepUpload } from "../Redux/Slices/Justslice";
+
 export default function Navbar() {
   const [showDropdown, setShowDropdown] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const handlenavigateProfile = () => {
+    dispatch(changeProfileTab("Account Settings"));
+    dispatch(KeepUpload(false));
+    navigate("/user-profile");
+  }
   return (
     <>
       {/* Navbar */}
@@ -36,7 +45,7 @@ export default function Navbar() {
               <div className="absolute top-[50px] right-[10px] z-[100] w-[150px] rounded-lg border-2 border-gray-200 bg-white p-2 text-sm text-gray-600 shadow-2xl">
                 <span
                   className="flex items-center gap-2 p-2 hover:bg-gray-100"
-                  onClick={() => navigate("/user-profile")}
+                  onClick={handlenavigateProfile}
                 >
                   <IoDocumentTextOutline className="text-md" /> My Content
                 </span>

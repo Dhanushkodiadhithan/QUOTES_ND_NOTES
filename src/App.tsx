@@ -1,7 +1,6 @@
 import "./App.css";
 import Navbar from "./Components/Navbar";
 import UserProfile from "./Pages/UserProfile";
-import UploadQuotes from "./Components/UploadQuotes";
 import Homepage from "./Pages/Homepage";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { getQuotesLoader } from "./loaders/getQuotesLoader"; // adjust import path
@@ -27,15 +26,6 @@ const router = createBrowserRouter([
       </>
     ),
     loader: getUserQuotesLoader,
-  },
-  {
-    path: "/upload-quotes",
-    element: (
-      <>
-        <Navbar />
-        <UploadQuotes />
-      </>
-    ),
   },
 ]);
 

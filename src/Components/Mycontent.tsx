@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState} from "react";
 import { FaRegHeart } from "react-icons/fa";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { LuQuote } from "react-icons/lu";
@@ -11,11 +11,10 @@ import { useLoaderData } from "react-router-dom";
 
 const tabs = [
   { label: "All Content", count: 6 },
-  { label: "Shared Quotes", count: 3 },
-  { label: "Favorites", count: 2 },
+  { label: "Favorites", count: 3 },
+  { label: "Saved", count: 2 },
 ];
 
-// Define quote type for strong typing
 interface Quote {
   _id: string;
   text: string;
@@ -37,14 +36,12 @@ interface Quote {
 export default function Mycontent() {
   const showUploadQuote = useSelector((state: any) => state.just.showUploadQuote);
   const dispatch = useDispatch();
-  const [activeTab, setActiveTab] = useState<string>("All Content");
+
   const [quotedelete, setQuoteDelete] = useState<boolean>(false);
 
   const quotes = useLoaderData() as Quote[];
-
-  // Filter quotes posted by 'user1'
   const user1Quotes = quotes.filter((quote) => quote.postedBy === "admin");
-
+const [activeTab, setActiveTab] = useState<string>("All Content");
   return (
     <>
       <div className="flex justify-center p-10">
@@ -78,7 +75,6 @@ export default function Mycontent() {
           </div>
           <div className="w-full">
             <h2 className="mb-6 text-2xl font-bold">My Content</h2>
-            {/* Tabs */}
             <div className="mb-8 flex gap-4">
               {tabs.map((tab) => (
                 <button
@@ -106,12 +102,7 @@ export default function Mycontent() {
                 + Create New
               </button>
             </div>
-            {/* Cards Grid */}
-            <div
-              className={`grid grid-cols-3 gap-6 ${
-                showUploadQuote ? "grid-cols-1" : ""
-              }`}
-            >
+            <div className={`grid gap-6 ${showUploadQuote ? "grid-cols-1" : "grid-cols-3"}`}>
               {showUploadQuote ? (
                 <UploadQuote />
               ) : (
