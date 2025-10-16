@@ -10,15 +10,52 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { changeProfileTab, KeepUpload } from "../Redux/Slices/Justslice";
 
+const dropdownItems = [
+  {
+    key: "myContent",
+    icon: <IoDocumentTextOutline className="text-md" />,
+    label: "My Content",
+    onClickType: "profileTab",
+    actionValue: "Account Settings",
+  },
+  {
+    key: "myFavorites",
+    icon: <FaRegHeart className="text-md" />,
+    label: "My Favorites",
+  },
+  {
+    key: "settings",
+    icon: <CiSettings className="text-lg" />,
+    label: "Settings",
+  },
+  {
+    key: "help",
+    icon: <IoIosHelpCircleOutline className="text-lg" />,
+    label: "Help",
+  },
+  {
+    key: "signOut",
+    icon: <PiSignOutFill className="text-lg" />,
+    label: "Sign Out",
+  },
+];
+
 export default function Navbar() {
   const [showDropdown, setShowDropdown] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const handlenavigateProfile = () => {
-    dispatch(changeProfileTab("Account Settings"));
-    dispatch(KeepUpload(false));
-    navigate("/user-profile");
-  }
+
+  const handleDropdownClick = (item: typeof dropdownItems[number]) => {
+    if (item.onClickType === "profileTab" && item.actionValue) {
+      dispatch(changeProfileTab(item.actionValue));
+      dispatch(KeepUpload(false));
+      navigate("/user-profile");
+    } else {
+      // Implement other click handlers here if needed
+      setShowDropdown(false);
+    }
+  };
+
   return (
     <>
       {/* Navbar */}
@@ -43,24 +80,15 @@ export default function Navbar() {
             <GoPerson />
             {showDropdown && (
               <div className="absolute top-[50px] right-[10px] z-[100] w-[150px] rounded-lg border-2 border-gray-200 bg-white p-2 text-sm text-gray-600 shadow-2xl">
-                <span
-                  className="flex items-center gap-2 p-2 hover:bg-gray-100"
-                  onClick={handlenavigateProfile}
-                >
-                  <IoDocumentTextOutline className="text-md" /> My Content
-                </span>
-                <span className="flex items-center gap-2 p-2 hover:bg-gray-100">
-                  <FaRegHeart className="text-md" /> My Favorites
-                </span>
-                <span className="flex items-center gap-2 p-2 hover:bg-gray-100">
-                  <CiSettings className="text-lg" /> Settings
-                </span>
-                <span className="flex items-center gap-2 p-2 hover:bg-gray-100">
-                  <IoIosHelpCircleOutline className="text-lg" /> Help
-                </span>
-                <span className="flex items-center gap-2 p-2 hover:bg-gray-100">
-                  <PiSignOutFill className="text-lg" /> Sign Out
-                </span>
+                {dropdownItems.map((item) => (
+                  <span
+                    key={item.key}
+                    className="flex items-center gap-2 p-2 hover:bg-gray-100 cursor-pointer"
+                    onClick={() => handleDropdownClick(item)}
+                  >
+                    {item.icon} {item.label}
+                  </span>
+                ))}
               </div>
             )}
           </div>

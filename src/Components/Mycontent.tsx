@@ -7,8 +7,6 @@ import { MdDeleteOutline } from "react-icons/md";
 import UploadQuote from "./UploadQuotes";
 import { useSelector, useDispatch } from "react-redux";
 import { ToggleShow } from "../Redux/Slices/Justslice";
-import { useLoaderData } from "react-router-dom";
-
 const tabs = [
   { label: "All Content", count: 6 },
   { label: "Favorites", count: 3 },
@@ -39,8 +37,8 @@ export default function Mycontent() {
 
   const [quotedelete, setQuoteDelete] = useState<boolean>(false);
 
-  const quotes = useLoaderData() as Quote[];
-  const user1Quotes = quotes.filter((quote) => quote.postedBy === "admin");
+  const quotes = useSelector((state: any) => state.feeds.allQuotes ?? [] );
+  const user1Quotes = quotes.filter((quote: Quote) => quote.postedBy === "admin");
 const [activeTab, setActiveTab] = useState<string>("All Content");
   return (
     <>
@@ -107,7 +105,7 @@ const [activeTab, setActiveTab] = useState<string>("All Content");
                 <UploadQuote />
               ) : (
                 <>
-                  {user1Quotes.map((quote) => (
+                  {user1Quotes.map((quote: Quote) => (
                     <Card key={quote._id} quote={quote} />
                   ))}
                 </>
