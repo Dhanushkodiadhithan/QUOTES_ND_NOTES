@@ -5,12 +5,13 @@ import Homepage from "./Pages/Homepage";
 import Login from "./Pages/Loginpage";
 import Signup from "./Pages/Signup";
 import { useSelector, useDispatch } from "react-redux";
-import { useEffect } from "react";
 import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom";
 import { getQuotesLoader } from "./loaders/getQuotesLoader";
-import { auth } from "./firebase";
+import { useEffect, useState, } from "react";
 import { onAuthStateChanged } from "firebase/auth";
-import { setCurrentUser } from "./Redux/Slices/authSlice";
+import { auth } from "./firebaseConfig";
+// Import your auth actions for Redux
+import { setUser, clearUser } from "./Redux/Slices/authslice"; // adjust paths
 
 // Wrapper to protect routes
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -21,53 +22,63 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
-const router = createBrowserRouter([
-  {
-    path: "/login",
-    element: <Login />,
-  },
-  {
-    path: "/signup",
-    element: <Signup />,
-  },
-  {
-    path: "/home-page",
-    element: (
-      <ProtectedRoute>
-        <Navbar />
-        <Homepage />
-      </ProtectedRoute>
-    ),
-    loader: getQuotesLoader,
-  },
-  {
-    path: "/user-profile",
-    element: (
-      <ProtectedRoute>
-        <Navbar />
-        <UserProfile />
-      </ProtectedRoute>
-    ),
-  },
-  // Redirect root to login or home depending on auth (optional)
-  {
-    path: "/",
-    element: <Navigate to="/login" replace />,
-  },
-]);
-
 function App() {
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        dispatch(setCurrentUser({ email: user.email ?? "" }));
+        const serializableUser = {
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName,
+        photoURL: user.photoURL,
+      };
+        dispatch(setUser(serializableUser)); // store user in Redux
       } else {
-        dispatch(setCurrentUser(null));
+        dispatch(clearUser()); // clear user on sign out
       }
+      setLoading(false);
     });
-    return () => unsub();
+    return unsubscribe; // cleanup subscription
   }, [dispatch]);
+
+  if (loading) return <div>Loading...</div>;
+
+  const router = createBrowserRouter([
+    {
+      path: "/login",
+      element: <Login />,
+    },
+    {
+      path: "/signup",
+      element: <Signup />,
+    },
+    {
+      path: "/home-page",
+      element: (
+        <ProtectedRoute>
+          <Navbar />
+          <Homepage />
+        </ProtectedRoute>
+      ),
+      loader: getQuotesLoader,
+    },
+    {
+      path: "/user-profile",
+      element: (
+        <ProtectedRoute>
+          <Navbar />
+          <UserProfile />
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/",
+      element: <Navigate to="/login" replace />,
+    },
+  ]);
 
   return <RouterProvider router={router} />;
 }

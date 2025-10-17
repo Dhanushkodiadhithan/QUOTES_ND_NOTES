@@ -9,6 +9,9 @@ import { PiSignOutFill } from "react-icons/pi";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { changeProfileTab, KeepUpload } from "../Redux/Slices/Justslice";
+import { signOut } from "firebase/auth";
+import { auth } from "../firebaseConfig";
+import { clearUser } from "../Redux/Slices/authslice";
 
 const dropdownItems = [
   {
@@ -45,27 +48,39 @@ export default function Navbar() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const handleSignOut = async () => {
+    try {
+      await signOut(auth);
+      dispatch(clearUser());
+      navigate("/login", { replace: true });
+    } catch (error) {
+      console.error("Sign out failed", error);
+      alert("Failed to sign out. Please try again."); // Optionally show error popup
+    }
+  };
+
   const handleDropdownClick = (item: typeof dropdownItems[number]) => {
-    if (item.onClickType === "profileTab" && item.actionValue) {
+    setShowDropdown(false); // Close dropdown immediately
+
+    if (item.key === "signOut") {
+      handleSignOut();
+    } else if (item.onClickType === "profileTab" && item.actionValue) {
       dispatch(changeProfileTab(item.actionValue));
       dispatch(KeepUpload(false));
       navigate("/user-profile");
-    } else {
-      // Implement other click handlers here if needed
-      setShowDropdown(false);
     }
+    // Other click handlers can be implemented here
   };
 
   return (
     <>
-      {/* Navbar */}
       <nav className="fixed top-0 left-0 z-50 w-full border-b-2 border-gray-200 py-2 text-3xl font-bold backdrop-blur-sm md:px-5">
         <div className="container mx-auto flex items-center justify-between px-4">
           <div className="flex items-center gap-2">
             <FaQuoteRight className="text-primary text-2xl" />
             <span
               className="cursor-pointer font-serif text-2xl font-bold"
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/home-page")}
             >
               QUOTES_ND_NOTES
             </span>
@@ -83,8 +98,10 @@ export default function Navbar() {
                 {dropdownItems.map((item) => (
                   <span
                     key={item.key}
-                    className="flex items-center gap-2 p-2 hover:bg-gray-100 cursor-pointer"
-                    onClick={() => handleDropdownClick(item)}
+                    className="flex items-center gap-2 p-2 hover:bg-gray-100 cursor-pointer "
+                    onClick={(e) => {
+                      e.stopPropagation(); // Prevent click event from closing dropdown
+                      handleDropdownClick(item)}}
                   >
                     {item.icon} {item.label}
                   </span>
