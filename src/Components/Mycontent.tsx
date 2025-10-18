@@ -1,12 +1,12 @@
 import { useState} from "react";
 import { FaRegHeart } from "react-icons/fa";
-import { MdOutlineRemoveRedEye } from "react-icons/md";
+// import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { LuQuote } from "react-icons/lu";
 import Card from "./Card";
 import { MdDeleteOutline } from "react-icons/md";
 import UploadQuote from "./UploadQuotes";
 import { useSelector, useDispatch } from "react-redux";
-import { ToggleShow } from "../Redux/Slices/Justslice";
+import { ToggleShow , changeContentTab} from "../Redux/Slices/Justslice";
 const tabs = [
   { label: "All Content", count: 6 },
   { label: "Favorites", count: 3 },
@@ -36,10 +36,9 @@ export default function Mycontent() {
   const dispatch = useDispatch();
 
   const [quotedelete, setQuoteDelete] = useState<boolean>(false);
-
+  const activeTab = useSelector((state:any)=> state.just.myContentTab);
   const quotes = useSelector((state: any) => state.feeds.allQuotes ?? [] );
   const user1Quotes = quotes.filter((quote: Quote) => quote.postedBy === "admin");
-const [activeTab, setActiveTab] = useState<string>("All Content");
   return (
     <>
       <div className="flex justify-center p-10">
@@ -54,14 +53,14 @@ const [activeTab, setActiveTab] = useState<string>("All Content");
               </p>
               <p className="text-sm text-[#27bb81]">+30 this month</p>
             </div>
-            <div className="w-[300px] rounded-lg border border-gray-200 p-5">
+            {/* <div className="w-[300px] rounded-lg border border-gray-200 p-5">
               <p className="text-gray-400">Total View</p>
               <p className="flex justify-between">
                 <span className="text-2xl font-bold">2,847</span>
                 <MdOutlineRemoveRedEye className="text-2xl text-[#f59e0b]" />
               </p>
               <p className="text-sm text-[#27bb81]">+892 this month</p>
-            </div>
+            </div> */}
             <div className="w-[300px] rounded-lg border border-gray-200 p-5">
               <p className="text-gray-400">Total Likes</p>
               <p className="flex justify-between">
@@ -82,7 +81,7 @@ const [activeTab, setActiveTab] = useState<string>("All Content");
                       ? "bg-primary text-white"
                       : "hover:bg-primary bg-gray-100 text-gray-600 hover:text-white"
                   }`}
-                  onClick={() => setActiveTab(tab.label)}
+                  onClick={() => dispatch(changeContentTab(tab.label))}
                 >
                   {tab.label} <span className="ml-2">{tab.count}</span>
                 </button>

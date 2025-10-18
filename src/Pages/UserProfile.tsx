@@ -3,7 +3,7 @@ import { MdOutlineFileUpload } from "react-icons/md";
 import { changeProfileTab } from "../Redux/Slices/Justslice";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  IoSettingsOutline,
+  // IoSettingsOutline,
   IoCameraOutline,
   IoDocumentTextOutline,
 } from "react-icons/io5";
@@ -84,10 +84,10 @@ export default function UserProfile() {
 
             {/* Right side: Action buttons */}
             <div className="flex h-full w-[50%] items-start justify-end gap-4">
-              <button className="flex items-center rounded-md px-4 py-2 text-black hover:bg-[#f59e0b] hover:text-white">
+              {/* <button className="flex items-center rounded-md px-4 py-2 text-black hover:bg-[#f59e0b] hover:text-white">
                 <IoSettingsOutline className="mr-2 text-xl" />
                 Settings
-              </button>
+              </button> */}
               <button className="bg-primary flex items-center rounded-md px-4 py-2 text-white">
                 <MdOutlineFileUpload className="mr-2 text-xl" />
                 Share Profile

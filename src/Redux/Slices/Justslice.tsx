@@ -3,11 +3,13 @@ import { createSlice } from "@reduxjs/toolkit";
 interface JustState {
   showUploadQuote: boolean;
   activeProfileTab:string;
+  myContentTab?:string;
 }
 
 const initialState: JustState = {
   showUploadQuote: false,
   activeProfileTab:"Account Settings",
+  myContentTab:"All Content",
 };
 
 const justSlice = createSlice({
@@ -22,8 +24,11 @@ const justSlice = createSlice({
     },
     changeProfileTab: (state, action) => {
       state.activeProfileTab = action.payload;
+    },
+    changeContentTab:(state, action) =>{
+      state.myContentTab = action.payload;
     }
   },
 });
-export const { ToggleShow , changeProfileTab,KeepUpload} = justSlice.actions;
+export const { ToggleShow , changeProfileTab,KeepUpload,changeContentTab} = justSlice.actions;
 export default justSlice.reducer;

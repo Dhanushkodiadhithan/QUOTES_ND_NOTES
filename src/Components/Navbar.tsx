@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { GoPerson } from "react-icons/go";
 import { FaRegHeart, FaQuoteRight } from "react-icons/fa";
-import SearchBar from "./SearchBar";
-import { CiSettings } from "react-icons/ci";
+// import { CiSettings } from "react-icons/ci";
+// import { IoIosHelpCircleOutline } from "react-icons/io";
 import { IoDocumentTextOutline } from "react-icons/io5";
-import { IoIosHelpCircleOutline } from "react-icons/io";
 import { PiSignOutFill } from "react-icons/pi";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -26,16 +25,16 @@ const dropdownItems = [
     icon: <FaRegHeart className="text-md" />,
     label: "My Favorites",
   },
-  {
-    key: "settings",
-    icon: <CiSettings className="text-lg" />,
-    label: "Settings",
-  },
-  {
-    key: "help",
-    icon: <IoIosHelpCircleOutline className="text-lg" />,
-    label: "Help",
-  },
+  // {
+  //   key: "settings",
+  //   icon: <CiSettings className="text-lg" />,
+  //   label: "Settings",
+  // },
+  // {
+  //   key: "help",
+  //   icon: <IoIosHelpCircleOutline className="text-lg" />,
+  //   label: "Help",
+  // },
   {
     key: "signOut",
     icon: <PiSignOutFill className="text-lg" />,
@@ -85,9 +84,7 @@ export default function Navbar() {
               QUOTES_ND_NOTES
             </span>
           </div>
-          <div className="flex items-center">
-            <SearchBar />
-          </div>
+          
           <div
             className="border-primary bg-primary relative flex cursor-pointer items-center justify-center rounded-full border-2 p-2 text-[25px] text-white"
             onClick={() => setShowDropdown((prev) => !prev)}
