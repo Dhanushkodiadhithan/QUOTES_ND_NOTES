@@ -1,5 +1,4 @@
 import { FaRegHeart } from "react-icons/fa";
-import { FaShareAlt } from "react-icons/fa";
 import { LuQuote } from "react-icons/lu";
 export default function HerosectionCard() {
   return (
@@ -17,7 +16,6 @@ export default function HerosectionCard() {
             <div className="cursor-pointer font-bold">-- Steve Jobs</div>
             <div className="flex">
               <FaRegHeart className="cursor-pointer text-lg" />
-              <FaShareAlt className="ml-4 cursor-pointer text-lg" />
             </div>
           </div>
           <div className="text-sm text-gray-400">Attitude</div>

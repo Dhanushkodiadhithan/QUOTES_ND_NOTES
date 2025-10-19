@@ -14,21 +14,18 @@ const tabs = [
 ];
 
 interface Quote {
-  _id: string;
+   _id: string;
   text: string;
   author: string;
   category: string;
   tags: string[];
   image?: string;
+  postedBy: string;
   likes: number;
   likedBy?: string[];
-  shares?: number;
-  sharedBy?: string[];
   savedBy?: string[];
-  isPublic?: boolean;
   createdAt?: string;
   updatedAt?: string;
-  postedBy?: string;
 }
 
 export default function Mycontent() {

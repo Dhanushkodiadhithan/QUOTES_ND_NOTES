@@ -1,5 +1,5 @@
 import { CiHeart } from "react-icons/ci";
-import { GoShareAndroid } from "react-icons/go";
+// import { GoShareAndroid } from "react-icons/go";
 import { FaRegBookmark } from "react-icons/fa";
 
 interface Quote {
@@ -9,12 +9,10 @@ interface Quote {
   category: string;
   tags: string[];
   image?: string;
+  postedBy: string;
   likes: number;
   likedBy?: string[];
-  shares?: number;
-  sharedBy?: string[];
   savedBy?: string[];
-  isPublic?: boolean;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -23,18 +21,18 @@ interface CardProps {
   quote: Quote;
 }
 function timeAgo(dateString: string | undefined): string {
-  if (!dateString) return '';
+  if (!dateString) return "";
   const now = new Date();
   const created = new Date(dateString);
   const seconds = Math.floor((now.getTime() - created.getTime()) / 1000);
 
   if (seconds < 60) return `${seconds}s ago`;
   const mins = Math.floor(seconds / 60);
-  if (mins < 60) return `${mins} min${mins === 1 ? '' : 's'} ago`;
+  if (mins < 60) return `${mins} min${mins === 1 ? "" : "s"} ago`;
   const hours = Math.floor(mins / 60);
-  if (hours < 24) return `${hours} hr${hours === 1 ? '' : 's'} ago`;
+  if (hours < 24) return `${hours} hr${hours === 1 ? "" : "s"} ago`;
   const days = Math.floor(hours / 24);
-  return `${days} day${days === 1 ? '' : 's'} ago`;
+  return `${days} day${days === 1 ? "" : "s"} ago`;
 }
 
 export default function Card({ quote }: CardProps) {
@@ -71,10 +69,10 @@ export default function Card({ quote }: CardProps) {
               <CiHeart className="text-2xl" />
               {quote.likes}
             </span>
-            <span className="flex gap-1">
+            {/* <span className="flex gap-1">
               <GoShareAndroid className="text-lg" />
               Share
-            </span>
+            </span> */}
           </div>
           <div>
             <FaRegBookmark />

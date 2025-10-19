@@ -1,13 +1,8 @@
-import { useState } from "react";
-import { MdOutlineFileUpload } from "react-icons/md";
+// import { MdOutlineFileUpload } from "react-icons/md";
 import { changeProfileTab } from "../Redux/Slices/Justslice";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  // IoSettingsOutline,
-  IoCameraOutline,
-  IoDocumentTextOutline,
-} from "react-icons/io5";
 import { GoPerson } from "react-icons/go";
+import { IoDocumentTextOutline } from "react-icons/io5";
 import Accountsetting from "../Components/Accountsetting";
 import Mycontent from "../Components/Mycontent";
 
@@ -23,54 +18,55 @@ const tabs = [
     icon: <IoDocumentTextOutline className="text-md" />,
   },
 ];
-
 export default function UserProfile() {
-  const [profileImg, setProfileImg] = useState<string | null>(null);
   const dispatch = useDispatch();
-  const activeProfileTab = useSelector((state: any) => state.just.activeProfileTab);
+  const activeProfileTab = useSelector(
+    (state: any) => state.just.activeProfileTab,
+  );
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const url = URL.createObjectURL(e.target.files[0]);
-      setProfileImg(url);
-    }
-  };
+
+  
+  // function formatMemberSince(dateString: string | undefined): string {
+  //   if (!dateString) return "";
+
+  //   const memberDate = new Date(dateString);
+  //   const now = new Date();
+
+  //   const diffTime = now.getTime() - memberDate.getTime();
+  //   const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+  //   if (diffDays === 0) {
+  //     return "today";
+  //   } else if (diffDays === 1) {
+  //     return "yesterday";
+  //   } else {
+  //     return memberDate.toISOString().slice(0, 10);
+  //   }
+  // }
+
 
   return (
     <>
       <div className="bg-[#fafaf9] pt-16">
-        <div className="flex h-[250px] items-center justify-center border-b border-gray-200">
+        <div className="flex py-10 items-center justify-center border-b border-gray-200">
           <div className="flex h-[200px] w-[1500px] py-4 lg:px-10 2xl:px-0">
             {/* Left side: Profile picture and user info */}
-            <div className="flex h-full w-[50%] items-center">
-              <div className="group relative h-[150px] w-[150px] overflow-hidden rounded-full bg-white shadow-lg">
+            <div className="flex h-full w-[70%] items-center">
+              <div className="group relative h-[150px] w-[150px] overflow-hidden rounded-full bg-white shadow-lg border-4 border-white">
                 <img
-                  src={
-                    profileImg
-                      ? profileImg
-                      : "https://www.shutterstock.com/image-vector/user-profile-icon-vector-avatar-600nw-2558760599.jpg"
-                  }
+                  src= "src/backend/uploads/Spiderman.webp"
                   alt="Profile"
                   className="h-full w-full rounded-full object-cover"
                 />
-                <label className="bg-opacity-40 absolute inset-0 flex cursor-pointer items-center justify-center bg-black opacity-0 transition-opacity group-hover:opacity-100">
-                  <IoCameraOutline className="text-3xl text-white" />
-                  <input
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={handleImageChange}
-                  />
-                </label>
               </div>
               <div className="ml-10 flex flex-col text-black">
-                <div className="text-2xl font-bold">Dhanushkodi adhithan</div>
-                <div className="text-sm text-gray-400">dhanukodiexample@gmail.com</div>
+                <div className="text-2xl font-bold">Dhanush</div>
+                <div className="text-sm text-gray-400">dhanushkodi@gmail.com</div>
                 <div className="my-4 flex items-center gap-4">
                   {[
-                    { count: 131, label: "Quotes" },
-                    { count: 89, label: "Favorites" },
-                    { count: 12, label: "Collections" },
+                    { count: 11, label: "Quotes" },
+                    { count: 11, label: "Favorites" },
+                    { count: 11, label: "Saved" },
                   ].map(({ count, label }) => (
                     <span key={label} className="flex flex-col items-center">
                       <span className="text-xl font-bold">{count}</span>
@@ -78,21 +74,24 @@ export default function UserProfile() {
                     </span>
                   ))}
                 </div>
-                <div className="text-sm text-gray-400">Member since March 2023</div>
+                <div className="mb-2 max-w-lg text-gray-600">
+                  Its my first website which i have created using React and
+                  Firebase. I love to share quotes and notes with everyone.
+                </div>
+                
+                <div className="text-sm text-gray-400">
+                  Member since January 1, 2023
+                </div>
               </div>
             </div>
 
             {/* Right side: Action buttons */}
-            <div className="flex h-full w-[50%] items-start justify-end gap-4">
-              {/* <button className="flex items-center rounded-md px-4 py-2 text-black hover:bg-[#f59e0b] hover:text-white">
-                <IoSettingsOutline className="mr-2 text-xl" />
-                Settings
-              </button> */}
+            {/* <div className="flex h-full w-[50%] items-start justify-end gap-4">
               <button className="bg-primary flex items-center rounded-md px-4 py-2 text-white">
                 <MdOutlineFileUpload className="mr-2 text-xl" />
                 Share Profile
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
 

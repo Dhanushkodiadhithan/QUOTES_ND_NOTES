@@ -6,7 +6,7 @@ import multer from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-
+import User from './Modules/User.js';
 import Quote from './Modules/Quotes.js';
 
 dotenv.config();
@@ -29,8 +29,8 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // MongoDB connection
-mongoose.connect(process.env.MONGO_URI, {
-}).then(() => console.log('MongoDB connected'))
+mongoose.connect(process.env.MONGO_URI, {})
+  .then(() => console.log('MongoDB connected'))
   .catch(err => console.error('DB error:', err.message));
 
 // Routes
@@ -54,15 +54,11 @@ app.post('/api/quotes', upload.single('image'), async (req, res) => {
       postedBy,
       likes,
       likedBy,
-      shares,
-      sharedBy,
       savedBy,
-      isPublic,
     } = req.body;
 
     const tagsArray = tags ? JSON.parse(tags) : [];
     const likedByArray = likedBy ? JSON.parse(likedBy) : [];
-    const sharedByArray = sharedBy ? JSON.parse(sharedBy) : [];
     const savedByArray = savedBy ? JSON.parse(savedBy) : [];
 
     const image = req.file ? `/uploads/${req.file.filename}` : "";
@@ -76,10 +72,7 @@ app.post('/api/quotes', upload.single('image'), async (req, res) => {
       postedBy,
       likes: likes || 0,
       likedBy: likedByArray,
-      shares: shares || 0,
-      sharedBy: sharedByArray,
       savedBy: savedByArray,
-      isPublic: isPublic !== undefined ? (isPublic === 'true' || isPublic === true) : true,
     });
 
     await quote.save();
@@ -105,11 +98,7 @@ app.put('/api/quotes/:id', upload.single('image'), async (req, res) => {
     if (req.file) updateData.image = `/uploads/${req.file.filename}`;
     if (updateData.tags) updateData.tags = JSON.parse(updateData.tags);
     if (updateData.likedBy) updateData.likedBy = JSON.parse(updateData.likedBy);
-    if (updateData.sharedBy) updateData.sharedBy = JSON.parse(updateData.sharedBy);
     if (updateData.savedBy) updateData.savedBy = JSON.parse(updateData.savedBy);
-    if (updateData.isPublic !== undefined) {
-       updateData.isPublic = (updateData.isPublic === 'true' || updateData.isPublic === true);
-    }
 
     const updatedQuote = await Quote.findByIdAndUpdate(req.params.id, updateData, { new: true });
     if (!updatedQuote) return res.status(404).json({ msg: 'Quote not found' });
@@ -118,6 +107,62 @@ app.put('/api/quotes/:id', upload.single('image'), async (req, res) => {
     res.status(400).json({ msg: error.message });
   }
 });
+
+// Create or get user on signup/login
+app.post('/api/users/auth/signup', async (req, res) => {
+  try {
+    const {
+      firebaseUid,
+      email,
+      name,
+      profilePic,
+      phoneNumber,
+      location,
+      website,
+      bio
+    } = req.body;
+
+    // See if user already exists (by firebaseUid)
+    let user = await User.findOne({ firebaseUid });
+
+    // If not, create new user
+    if (!user) {
+      user = new User({
+        firebaseUid,
+        email,
+        name,
+        profilePic,
+        phoneNumber,
+        location,
+        website,
+        bio
+        // createdAt will be set automatically by Mongoose!
+      });
+      await user.save();
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
+});
+
+app.get('/api/users/by-uid/:firebaseUid', async (req, res) => {
+  try {
+    const { firebaseUid } = req.params;
+    const user = await User.findOne({ firebaseUid });
+
+    if (!user) {
+      return res.status(404).json({ msg: 'User not found' });
+    }
+
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
+});
+
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

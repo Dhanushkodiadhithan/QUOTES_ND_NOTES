@@ -9,11 +9,7 @@ const QuoteSchema = new mongoose.Schema({
   postedBy:    { type: String },
   likes:       { type: Number, default: 0 },
   likedBy:     { type: [String], default: [] },
-  shares:      { type: Number, default: 0 },
-  sharedBy:    { type: [String], default: [] },
   savedBy:     { type: [String], default: [] },
-  isPublic:    { type: Boolean, default: true },
-  comments:    { type: [mongoose.Schema.Types.ObjectId], ref: 'Comment', default: [] },
   createdAt:   { type: Date, default: Date.now },
   updatedAt:   { type: Date, default: Date.now }
 });

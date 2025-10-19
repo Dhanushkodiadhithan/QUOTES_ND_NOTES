@@ -19,10 +19,15 @@ export default function Login() {
     setLoading(true); // Set loading state for UI feedback during auth
 
     try {
-      // Firebase sign-in with email and password
-      await signInWithEmailAndPassword(auth, email, password);
+      const result = await signInWithEmailAndPassword(auth, email, password);
+      const user = result.user;
 
-      // Redirect to home page on successful login
+      // Fetch user info from backend using Firebase UID
+      await fetch(`http://localhost:5000/api/users/by-uid/${user.uid}`);
+
+      // Store backend user info in Redux
+
+      // Navigate to home page after successful login
       navigate("/home-page", { replace: true });
     } catch (err: any) {
       // Handle specific Firebase auth error codes with friendly messages

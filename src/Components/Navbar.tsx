@@ -10,7 +10,6 @@ import { useDispatch } from "react-redux";
 import { changeProfileTab, KeepUpload } from "../Redux/Slices/Justslice";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebaseConfig";
-import { clearUser } from "../Redux/Slices/authslice";
 
 const dropdownItems = [
   {
@@ -50,7 +49,6 @@ export default function Navbar() {
   const handleSignOut = async () => {
     try {
       await signOut(auth);
-      dispatch(clearUser());
       navigate("/login", { replace: true });
     } catch (error) {
       console.error("Sign out failed", error);
@@ -58,7 +56,7 @@ export default function Navbar() {
     }
   };
 
-  const handleDropdownClick = (item: typeof dropdownItems[number]) => {
+  const handleDropdownClick = (item: (typeof dropdownItems)[number]) => {
     setShowDropdown(false); // Close dropdown immediately
 
     if (item.key === "signOut") {
@@ -67,6 +65,7 @@ export default function Navbar() {
       dispatch(changeProfileTab(item.actionValue));
       dispatch(KeepUpload(false));
       navigate("/user-profile");
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
     // Other click handlers can be implemented here
   };
@@ -84,7 +83,7 @@ export default function Navbar() {
               QUOTES_ND_NOTES
             </span>
           </div>
-          
+
           <div
             className="border-primary bg-primary relative flex cursor-pointer items-center justify-center rounded-full border-2 p-2 text-[25px] text-white"
             onClick={() => setShowDropdown((prev) => !prev)}
@@ -95,10 +94,11 @@ export default function Navbar() {
                 {dropdownItems.map((item) => (
                   <span
                     key={item.key}
-                    className="flex items-center gap-2 p-2 hover:bg-gray-100 cursor-pointer "
+                    className="flex cursor-pointer items-center gap-2 p-2 hover:bg-gray-100"
                     onClick={(e) => {
                       e.stopPropagation(); // Prevent click event from closing dropdown
-                      handleDropdownClick(item)}}
+                      handleDropdownClick(item);
+                    }}
                   >
                     {item.icon} {item.label}
                   </span>
