@@ -1,10 +1,12 @@
-// import { MdOutlineFileUpload } from "react-icons/md";
+import { useEffect, useState } from "react";
 import { changeProfileTab } from "../Redux/Slices/Justslice";
 import { useDispatch, useSelector } from "react-redux";
 import { GoPerson } from "react-icons/go";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import Accountsetting from "../Components/Accountsetting";
+const AccountsettingAny = Accountsetting as any;
 import Mycontent from "../Components/Mycontent";
+import { getAuth } from "firebase/auth";
 
 const tabs = [
   {
@@ -18,32 +20,74 @@ const tabs = [
     icon: <IoDocumentTextOutline className="text-md" />,
   },
 ];
+
 export default function UserProfile() {
   const dispatch = useDispatch();
-  const activeProfileTab = useSelector(
-    (state: any) => state.just.activeProfileTab,
-  );
+  const activeProfileTab = useSelector((state: any) => state.just.activeProfileTab);
 
+  const [profile, setProfile] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
-  
-  // function formatMemberSince(dateString: string | undefined): string {
-  //   if (!dateString) return "";
+  // ✅ Fetch user profile using fetch (no Axios)
+  const fetchProfile = async () => {
+    try {
+      setLoading(true);
+      const auth = getAuth();
+      const currentUser = auth.currentUser;
 
-  //   const memberDate = new Date(dateString);
-  //   const now = new Date();
+      if (!currentUser) {
+        console.warn("⚠️ No logged-in user found");
+        setProfile(null);
+        setLoading(false);
+        return;
+      }
 
-  //   const diffTime = now.getTime() - memberDate.getTime();
-  //   const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+      const token = await currentUser.getIdToken();
 
-  //   if (diffDays === 0) {
-  //     return "today";
-  //   } else if (diffDays === 1) {
-  //     return "yesterday";
-  //   } else {
-  //     return memberDate.toISOString().slice(0, 10);
-  //   }
-  // }
+      const res = await fetch("http://localhost:5000/api/users/me", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
+      if (!res.ok) {
+        const errText = await res.text();
+        throw new Error(`Profile fetch failed: ${res.status} - ${errText}`);
+      }
+
+      const data = await res.json();
+      console.log("✅ Profile data loaded:", data);
+      setProfile(data);
+    } catch (err) {
+      console.error("❌ Error loading profile:", err);
+      setProfile(null);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchProfile();
+  }, []);
+
+  // ✅ This ensures UI auto-refreshes after saving in Accountsetting
+  const handleProfileUpdated = async () => {
+    await fetchProfile();
+  };
+
+  if (loading)
+    return (
+      <div className="flex items-center justify-center h-screen text-gray-500">
+        Loading profile...
+      </div>
+    );
+
+  if (!profile)
+    return (
+      <div className="flex items-center justify-center h-screen text-gray-500">
+        No profile data found.
+      </div>
+    );
 
   return (
     <>
@@ -54,14 +98,20 @@ export default function UserProfile() {
             <div className="flex h-full w-[70%] items-center">
               <div className="group relative h-[150px] w-[150px] overflow-hidden rounded-full bg-white shadow-lg border-4 border-white">
                 <img
-                  src= "src/backend/uploads/Spiderman.webp"
+                  src={
+                    profile.profilePic
+                      ? `http://localhost:5000/${profile.profilePic}`
+                      : "src/backend/uploads/Spiderman.webp"
+                  }
                   alt="Profile"
                   className="h-full w-full rounded-full object-cover"
                 />
               </div>
               <div className="ml-10 flex flex-col text-black">
-                <div className="text-2xl font-bold">Dhanush</div>
-                <div className="text-sm text-gray-400">dhanushkodi@gmail.com</div>
+                <div className="text-2xl font-bold">
+                  {profile.name || "Anonymous"}
+                </div>
+                <div className="text-sm text-gray-400">{profile.email || ""}</div>
                 <div className="my-4 flex items-center gap-4">
                   {[
                     { count: 11, label: "Quotes" },
@@ -75,23 +125,16 @@ export default function UserProfile() {
                   ))}
                 </div>
                 <div className="mb-2 max-w-lg text-gray-600">
-                  Its my first website which i have created using React and
-                  Firebase. I love to share quotes and notes with everyone.
+                  {profile.bio || "No bio yet."}
                 </div>
-                
                 <div className="text-sm text-gray-400">
-                  Member since January 1, 2023
+                  Member since{" "}
+                  {profile.createdAt
+                    ? new Date(profile.createdAt).toLocaleDateString()
+                    : "January 1, 2023"}
                 </div>
               </div>
             </div>
-
-            {/* Right side: Action buttons */}
-            {/* <div className="flex h-full w-[50%] items-start justify-end gap-4">
-              <button className="bg-primary flex items-center rounded-md px-4 py-2 text-white">
-                <MdOutlineFileUpload className="mr-2 text-xl" />
-                Share Profile
-              </button>
-            </div> */}
           </div>
         </div>
 
@@ -118,8 +161,9 @@ export default function UserProfile() {
         </div>
       </div>
 
-      {/* Content */}
-      {activeProfileTab === "Account Settings" && <Accountsetting />}
+      {/* Tab Content */}
+        <AccountsettingAny onProfileUpdated={handleProfileUpdated} />
+    
       {activeProfileTab === "My Content" && <Mycontent />}
     </>
   );

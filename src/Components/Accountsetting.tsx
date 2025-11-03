@@ -1,134 +1,200 @@
-// import { MdOutlineShield } from "react-icons/md";
-// import { FiKey } from "react-icons/fi";
+import { useState, useEffect } from "react";
+import useUserProfile from "../hooks/useUserProfile";
+import { getAuth } from "firebase/auth";
 
 export default function Accountsetting() {
+  const { profile, loading, refetch } = useUserProfile();
+  const [form, setForm] = useState<any>(null);
+  const [file, setFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
 
+  // ✅ Load current profile into editable form
+  useEffect(() => {
+    if (profile) {
+      setForm(profile);
+      setPreviewUrl(
+        profile.profilePic
+          ? `http://localhost:5000/${profile.profilePic}`
+          : "/src/backend/uploads/Spiderman.webp"
+      );
+    }
+  }, [profile]);
+
+  // ✅ Update input fields
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  // ✅ Handle file input + preview
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selected = e.target.files?.[0] || null;
+    setFile(selected);
+    if (selected) {
+      setPreviewUrl(URL.createObjectURL(selected));
+    }
+  };
+
+  // ✅ Submit updates
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSaving(true);
+
+    try {
+      const auth = getAuth();
+      const currentUser = auth.currentUser;
+      if (!currentUser) return alert("Not logged in");
+
+      const token = await currentUser.getIdToken();
+
+      const formData = new FormData();
+      const editableFields = ["name", "phoneNumber", "location", "website", "bio"];
+      editableFields.forEach((field) => {
+        if (form[field] !== undefined && form[field] !== null) {
+          formData.append(field, form[field]);
+        }
+      });
+      if (file) formData.append("profilePic", file);
+
+      const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+      const res = await fetch(`${baseUrl}/users/update`, {
+        method: "PUT",
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
+      });
+
+      const updated = await res.json();
+      if (!res.ok) throw new Error(updated.msg || "Update failed");
+
+      alert("✅ Profile updated successfully!");
+      setForm(updated);
+      setFile(null);
+
+      // ✅ Re-fetch to refresh UserProfile instantly
+      if (refetch) await refetch();
+
+      // ✅ Update preview (new image)
+      if (updated.profilePic) {
+        setPreviewUrl(`http://localhost:5000/${updated.profilePic}`);
+      }
+    } catch (err) {
+      console.error("❌ Update failed:", err);
+      alert("Failed to update profile");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  if (loading || !form)
+    return (
+      <div className="flex items-center justify-center py-10 text-gray-500">
+        Loading profile...
+      </div>
+    );
 
   return (
     <div className="my-10 flex w-full items-center justify-center py-5">
-      <div className="flex w-[1000px] justify-center ">
-        {/* Left Section: Personal Information */}
+      <div className="flex w-[1000px] justify-center">
         <div className="w-[50%]">
           <p className="mb-3 text-xl font-bold">Personal Information</p>
-          <div className="flex flex-col gap-5 border border-gray-200 p-5">
-            <form >
-              {/* Full Name */}
+          <div className="flex flex-col gap-5 border border-gray-200 p-5 rounded-md shadow-sm bg-white">
+            <form onSubmit={handleSubmit}>
               <div>
-                <label htmlFor="name">Full Name</label>
+                <label>Full Name</label>
                 <input
                   type="text"
-                  id="name"
                   name="name"
-                  value="dhanush"
+                  value={form.name || ""}
+                  onChange={handleChange}
                   className="w-full rounded border p-2"
-                  readOnly
                 />
               </div>
 
-              {/* Email */}
               <div>
-                <label htmlFor="email">Email Address</label>
+                <label>Email</label>
                 <input
                   type="email"
-                  id="email"
                   name="email"
-                  className="w-full rounded border p-2"
-                  value="dhaushkodi@gmail.com"
-                  disabled // Email usually not editable
+                  value={form.email || ""}
+                  readOnly
+                  className="w-full rounded border p-2 bg-gray-100"
                 />
               </div>
 
-              {/* Phone Number */}
               <div>
-                <label htmlFor="phoneNumber">Phone Number</label>
+                <label>Phone Number</label>
                 <input
                   type="tel"
-                  id="phoneNumber"
                   name="phoneNumber"
-                  value="9876543210"
-                  readOnly
+                  value={form.phoneNumber || ""}
+                  onChange={handleChange}
                   className="w-full rounded border p-2"
                 />
               </div>
 
-              {/* Location */}
               <div>
-                <label htmlFor="location">Location</label>
+                <label>Location</label>
                 <input
                   type="text"
-                  id="location"
-                  value="india"
-                  readOnly
                   name="location"
+                  value={form.location || ""}
+                  onChange={handleChange}
                   className="w-full rounded border p-2"
                 />
               </div>
 
-              {/* Website */}
               <div>
-                <label htmlFor="website">Website</label>
+                <label>Website</label>
                 <input
                   type="text"
-                  id="website"
-                  value="ww.example.com"
-                  readOnly
                   name="website"
+                  value={form.website || ""}
+                  onChange={handleChange}
                   className="w-full rounded border p-2"
                 />
               </div>
 
-              {/* Profile Picture Upload */}
               <div>
-                <label htmlFor="profilePic">Profile Picture</label>
+                <label>Profile Picture</label>
                 <input
                   type="file"
-                  id="profilePic"
                   accept="image/*"
-                  className="w-full p-2"
+                  onChange={handleFileChange}
                 />
-                
+                <img
+                  src={previewUrl || "/src/backend/uploads/Spiderman.webp"}
+                  alt="Preview"
+                  className="mt-2 h-20 w-20 rounded-full object-cover border"
+                />
               </div>
 
-              {/* Bio */}
               <div>
-                <label htmlFor="bio">Bio</label>
+                <label>Bio</label>
                 <textarea
-                  id="bio"
                   name="bio"
+                  value={form.bio || ""}
+                  onChange={handleChange}
                   className="w-full rounded border p-2"
                   rows={4}
-                  maxLength={500}
-                  placeholder="Tell us about yourself..."
                 />
-                <p className="text-sm text-gray-400">
-                </p>
               </div>
 
               <button
                 type="submit"
-                className="mt-4 w-full rounded-md bg-blue-600 py-2 text-white hover:bg-blue-700"
+                disabled={saving}
+                className={`mt-4 w-full rounded-md py-2 text-white transition-all duration-300 ${
+                  saving
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-blue-600 hover:bg-blue-700"
+                }`}
               >
-                Save Changes
+                {saving ? "Saving..." : "Save Changes"}
               </button>
             </form>
           </div>
         </div>
-
-        {/* Right Section: Security */}
-        {/* <div className="flex w-[50%] flex-col gap-10">
-          <div>
-            <p className="mb-3 text-xl font-bold">Security</p>
-            <div className="flex flex-col items-center justify-center gap-5 border border-gray-200 p-5 text-center">
-              <MdOutlineShield className="text-6xl text-gray-400" />
-              <p className="text-gray-400">
-                Keep your account secure with a strong <br /> password
-              </p>
-              <button className="flex items-center gap-3 rounded-md px-4 py-2 text-black hover:bg-[#f59e0b] hover:text-white">
-                <FiKey /> Change Password
-              </button>
-            </div>
-          </div>
-        </div> */}
       </div>
     </div>
   );

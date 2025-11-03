@@ -1,15 +1,16 @@
 export async function getQuotesLoader() {
-  const response = await fetch('http://localhost:5000/api/quotes');
+  const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+
+  const response = await fetch(`${baseUrl}/quotes`);
 
   if (!response.ok) {
-    throw new Response('Failed to load quotes', { status: response.status });
+    throw new Response("Failed to load quotes", { status: response.status });
   }
 
   const quotes = await response.json();
 
-  // Optionally validate data here before returning
   if (!Array.isArray(quotes)) {
-    throw new Response('Invalid quotes data', { status: 500 });
+    throw new Response("Invalid quotes data", { status: 500 });
   }
 
   return quotes;
